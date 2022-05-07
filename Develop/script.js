@@ -8,18 +8,27 @@ $("#currentDay").text(today.format("ha, dddd, MMM Do, YYYY"));
 
 //Hardcode object with empty strings
 var storedEvents = {
-    9: "hi",
-    10: "sup",
-    11: "just",
-    12: "testing this",
-    13: "out",
-    14: "",
-    15: "",
-    16: "",
-    17: ""
+        9: "",
+        10: "",
+        11: "",
+        12: "",
+        13: "",
+        14: "",
+        15: "",
+        16: "",
+        17: ""
+    }
+
+function initStorage(){
+    oldStoredEvents = JSON.parse(localStorage.getItem("storedStuff"));
+    if (oldStoredEvents){
+        storedEvents = oldStoredEvents;
+    }
 }
 
-localStorage.setItem("storedStuff", JSON.stringify(storedEvents));
+// storedEvents = JSON.parse(localStorage.getItem("storedStuff"));
+
+// localStorage.setItem("storedStuff", JSON.stringify(storedEvents));
 
 // for each workday hour (9am - 5pm), display a timeblock
 // TODO: Create 8 timeblocks and append them to the last? Label each with appropriate hours
@@ -27,9 +36,10 @@ function timeBlock(){
     var startTime = 9;
     // console.log(startTime);
     for(var i = 0; i <= 8; i++){
-        // var actualTime = moment().format("H");
+        var actualTime = moment().format("H");
+        // console.log(actualTime);
         // Hardcoded time for testing 
-        var actualTime = 14;        // ============== Changeme
+        // var actualTime = 12;        // ============== Changeme
         var loopTime = startTime + i;
 
         // Create elements
@@ -44,10 +54,10 @@ function timeBlock(){
         currentRow.append(currentHour);
         currentHour.addClass("hour");
         currentRow.append(inputField);
-        inputField.attr("name", loopTime);
+        inputField.attr("id", loopTime);
         inputField.attr("type", "text");
         inputField.attr("placeholder", storedEvents[loopTime]);
-        console.log(storedEvents.looptime);
+        // console.log(storedEvents.looptime);
         currentRow.append(saveBtn);
         saveBtn.addClass("saveBtn");
         saveBtn.attr("id", loopTime);
@@ -57,33 +67,36 @@ function timeBlock(){
         //Change color of the time block depending on if it is past, future, or present
         if(actualTime > loopTime){
             inputField.addClass("past");
-        } else if (actualTime === loopTime)  {
+        } else if (actualTime == loopTime)  {
             inputField.addClass("present");
         } else {
             inputField.addClass("future");
         }
+
+        saveBtn.on('click', function (event) {
+            var btnIndex = event.target.id;
+            var inputText = document.getElementById(btnIndex).value; //wtf is this
+            //based on index above, save the input text to an object
+            storedEvents[btnIndex] = inputText;
+            console.log(storedEvents);
+            setStorage();
+          });
 
         //Create an eventlistener and save input to an object
         // saveBtn.on('click', function () {
         //     console.log(inputField.text);
         //     var savedInput = $("inputField").text;
         //   });
-        saveBtn.on('click', function (event) {
-            var btnIndex = event.target.id;
-            var currentInput = inputField.attr("name", btnIndex);  // ============= FIX ME!!!!!!
-            console.log(currentInput);
-            //based on index above, save the input text to an object
-            console.log(btnIndex);
-            // console.log(inputField.name);
-            // storedEvents[btnIndex] = "TESTING"
-            // console.log(storedEvents[btnIndex]);
-            // console.log(inputField.val());
-
-          });
     }
 }
 
+function setStorage(){
+    localStorage.setItem("storedStuff", JSON.stringify(storedEvents));
+}
+
+initStorage();
 timeBlock();
+setStorage();
 
 // saveBtn.on('click', function (event) {
 //     var btnIndex = event.target.id;
