@@ -1,10 +1,25 @@
-var timeBlockEl = document.querySelector("#startingPoint");
+// var timeBlockEl = document.querySelector("#startingPoint");
+var timeBlockEl = $(".time-block");
 // console.log(timeBlockEl);
 
 //display current day
 var today = moment();
 $("#currentDay").text(today.format("ha, dddd, MMM Do, YYYY"));
 
+//Hardcode object with empty strings
+var storedEvents = {
+    9: "hi",
+    10: "sup",
+    11: "just",
+    12: "testing this",
+    13: "out",
+    14: "",
+    15: "",
+    16: "",
+    17: ""
+}
+
+localStorage.setItem("storedStuff", JSON.stringify(storedEvents));
 
 // for each workday hour (9am - 5pm), display a timeblock
 // TODO: Create 8 timeblocks and append them to the last? Label each with appropriate hours
@@ -13,44 +28,68 @@ function timeBlock(){
     // console.log(startTime);
     for(var i = 0; i <= 8; i++){
         // var actualTime = moment().format("H");
-        // Hardcoded time for testing
-        var actualTime = 14;
+        // Hardcoded time for testing 
+        var actualTime = 14;        // ============== Changeme
         var loopTime = startTime + i;
-        var currentRow = document.createElement("div");   
-        var currentHour = document.createElement("h4");
-        // default inputField color to green - we'll handle actual color with if statement of moment()
-        var inputField = document.createElement("input");
-        var saveBtn = document.createElement("button")
 
-        // Go through and build each row
-        timeBlockEl.appendChild(currentRow);
-        currentRow.setAttribute("class", "row");
-        currentRow.appendChild(currentHour);
-        currentHour.setAttribute("class", "hour");
-        currentRow.appendChild(inputField);
-        // inputField.setAttribute();
-        currentRow.appendChild(saveBtn);
-        saveBtn.setAttribute("class", "saveBtn");
-        saveBtn.textContent = "💾"
-        currentHour.textContent = moment(loopTime, "H").format("ha");
-        // console.log(currentHour);
-        console.log(moment().format("H"));
+        // Create elements
+        var currentRow = $("<div>");
+        var currentHour = $("<h4>");
+        var inputField = $("<input>");
+        var saveBtn = $("<button>");
+
+        // Go through and build each row containing time, input, button
+        timeBlockEl.append(currentRow);
+        currentRow.addClass("row");
+        currentRow.append(currentHour);
+        currentHour.addClass("hour");
+        currentRow.append(inputField);
+        inputField.attr("name", loopTime);
+        inputField.attr("type", "text");
+        inputField.attr("placeholder", storedEvents[loopTime]);
+        console.log(storedEvents.looptime);
+        currentRow.append(saveBtn);
+        saveBtn.addClass("saveBtn");
+        saveBtn.attr("id", loopTime);
+        saveBtn.text("💾");
+        currentHour.text(moment(loopTime, "H").format("ha"));
+        
+        //Change color of the time block depending on if it is past, future, or present
         if(actualTime > loopTime){
-            inputField.setAttribute("class", "past");
+            inputField.addClass("past");
         } else if (actualTime === loopTime)  {
-            inputField.setAttribute("class", "present");
+            inputField.addClass("present");
         } else {
-            inputField.setAttribute("class", "future");
+            inputField.addClass("future");
         }
-        console.log(actualTime);
+
+        //Create an eventlistener and save input to an object
+        // saveBtn.on('click', function () {
+        //     console.log(inputField.text);
+        //     var savedInput = $("inputField").text;
+        //   });
+        saveBtn.on('click', function (event) {
+            var btnIndex = event.target.id;
+            var currentInput = inputField.attr("name", btnIndex);  // ============= FIX ME!!!!!!
+            console.log(currentInput);
+            //based on index above, save the input text to an object
+            console.log(btnIndex);
+            // console.log(inputField.name);
+            // storedEvents[btnIndex] = "TESTING"
+            // console.log(storedEvents[btnIndex]);
+            // console.log(inputField.val());
+
+          });
     }
 }
 
 timeBlock();
 
-
-
-
+// saveBtn.on('click', function (event) {
+//     var btnIndex = event.target.id;
+//     console.log(btnIndex);
+//     // inputField.text(storedEvents.
+//   });
 //If timeblock is in past, make background-color gray
 //if timeblock is the current hour, make background-color red
 //if timeblock is in the future, make background-color green
