@@ -19,6 +19,7 @@ var storedEvents = {
         17: ""
     }
 
+// If storage exists, don't replace the stored values. Otherwise, initialize the objects and make them blank
 function initStorage(){
     oldStoredEvents = JSON.parse(localStorage.getItem("storedStuff"));
     if (oldStoredEvents){
@@ -26,20 +27,11 @@ function initStorage(){
     }
 }
 
-// storedEvents = JSON.parse(localStorage.getItem("storedStuff"));
-
-// localStorage.setItem("storedStuff", JSON.stringify(storedEvents));
-
 // for each workday hour (9am - 5pm), display a timeblock
-// TODO: Create 8 timeblocks and append them to the last? Label each with appropriate hours
 function timeBlock(){
     var startTime = 9;
-    // console.log(startTime);
     for(var i = 0; i <= 8; i++){
         var actualTime = moment().format("H");
-        // console.log(actualTime);
-        // Hardcoded time for testing 
-        // var actualTime = 12;        // ============== Changeme
         var loopTime = startTime + i;
 
         // Create elements
@@ -57,7 +49,6 @@ function timeBlock(){
         inputField.attr("id", loopTime);
         inputField.attr("type", "text");
         inputField.attr("placeholder", storedEvents[loopTime]);
-        // console.log(storedEvents.looptime);
         currentRow.append(saveBtn);
         saveBtn.addClass("saveBtn");
         saveBtn.attr("id", loopTime);
@@ -73,23 +64,18 @@ function timeBlock(){
             inputField.addClass("future");
         }
 
+        // If you click a button, it stores that button id based on above. It uses that to store the text inside.
         saveBtn.on('click', function (event) {
             var btnIndex = event.target.id;
             var inputText = document.getElementById(btnIndex).value; //wtf is this
             //based on index above, save the input text to an object
             storedEvents[btnIndex] = inputText;
-            console.log(storedEvents);
             setStorage();
           });
-
-        //Create an eventlistener and save input to an object
-        // saveBtn.on('click', function () {
-        //     console.log(inputField.text);
-        //     var savedInput = $("inputField").text;
-        //   });
     }
 }
 
+// Set any new things
 function setStorage(){
     localStorage.setItem("storedStuff", JSON.stringify(storedEvents));
 }
@@ -97,17 +83,3 @@ function setStorage(){
 initStorage();
 timeBlock();
 setStorage();
-
-// saveBtn.on('click', function (event) {
-//     var btnIndex = event.target.id;
-//     console.log(btnIndex);
-//     // inputField.text(storedEvents.
-//   });
-//If timeblock is in past, make background-color gray
-//if timeblock is the current hour, make background-color red
-//if timeblock is in the future, make background-color green
-
-//timeblock is a text field that can be saved
-
-//when the text field is saved, it is stored in localstorage and displayed upon reload
-
