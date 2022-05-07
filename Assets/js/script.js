@@ -47,6 +47,7 @@ function timeBlock(){
         currentHour.addClass("hour");
         currentRow.append(inputField);
         inputField.attr("id", loopTime);
+        inputField.addClass("col-3 col-md-8 col-xl-9");
         inputField.attr("type", "text");
         inputField.attr("placeholder", storedEvents[loopTime]);
         currentRow.append(saveBtn);
