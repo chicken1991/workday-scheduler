@@ -13,4 +13,4 @@ This page was built dynamically using js. It loops through the workday hours and
 - https://github.com/chicken1991/workday-scheduler.git
 
 
-[Demo Screenshot](./Assets/screenshot.png)
+![Demo Screenshot](./Assets/screenshot.png)
